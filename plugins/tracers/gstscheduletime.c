@@ -69,6 +69,8 @@ static void sched_time_compute (GstTracer * tracer, guint64 ts, GstPad * pad);
 static void do_push_buffer_list_pre (GstTracer * tracer, GstClockTime ts,
     GstPad * pad, GstBufferList * list);
 static void gst_scheduletime_tracer_finalize (GObject * obj);
+static void do_pad_link_post (GstTracer * tracer, GstClockTime ts,
+    GstPad * srcpad, GstPad * sinkpad, GstPadLinkReturn result);
 
 static void
 key_destroy (gpointer pad)
@@ -139,6 +141,12 @@ do_push_buffer_list_pre (GstTracer * tracer, GstClockTime ts, GstPad * pad,
   }
 }
 
+static void
+do_pad_link_post (GstTracer * tracer, GstClockTime ts, GstPad * srcpad,
+    GstPad * sinkpad, GstPadLinkReturn result)
+{
+}
+
 /* tracer class */
 
 static void
@@ -192,4 +200,7 @@ gst_scheduletime_tracer_init (GstScheduletimeTracer * self)
 
   gst_shark_tracer_register_hook (tracer, "pad-pull-range-pre",
       G_CALLBACK (sched_time_compute));
+
+  gst_shark_tracer_register_hook (tracer, "pad-link-post",
+      G_CALLBACK (do_pad_link_post));
 }
